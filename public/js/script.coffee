@@ -2,6 +2,7 @@ class CoachPerf
   
   constructor: (opts) ->
     @init_canvas()
+    @set_config()
     
     @p = paper
     @p.setup @canvas[0]
@@ -13,6 +14,10 @@ class CoachPerf
 
     @tool = new @p.Tool
     @tool.onMouseMove = @mouse_move
+    
+  set_config: ->
+    @dot_radius = 10
+    @mat_color = '#333'
     
   mouse_move: (event) =>
     console.log "event", event
@@ -49,8 +54,9 @@ class CoachPerf
       if even
         x -= 0.50*r
       
-      dot = new @p.Path.Circle [x, y], 5
-      dot.fillColor = 'white'
+      dot = new @p.Path.Circle [x, y], @dot_radius
+      # dot.fillColor = 'white'
+      
       row_dots.push dot
     
     return row_dots
@@ -58,6 +64,9 @@ class CoachPerf
   draw_dot_field: (offset) ->
     w = @v.size.width*1.20
     h = @v.size.height
+    
+    bg = new @p.Path.Rectangle [0-(0.1*w),0], [w, w]
+    bg.fillColor = @mat_color
 
     hn = 20
     r = w/20
@@ -66,7 +75,7 @@ class CoachPerf
     
     vn = Math.floor w/vd
     
-    field_dots = []
+    field_dots = [bg]
     
     for i in [1..vn]
       y = i*vd
@@ -80,9 +89,10 @@ class CoachPerf
       for dot in row_dots
         field_dots.push dot
 
-    dot_field = new @p.Group field_dots
-    dot_field.position = @v.center
-    return dot_field
+    dot_field = new @p.CompoundPath field_dots
+    dot_field_r = dot_field.rasterize()
+    dot_field.remove
+    return dot_field_r
   
   draw: (event) =>
     center = @mouse_point or @v.center
