@@ -6,7 +6,8 @@
       var opts;
       return opts = {
         hn: 'number of holes in a row',
-        dot_radius: 'the radius of each dot'
+        dot_radius: 'the radius of each dot',
+        r_speed: 'rotation_speed'
       };
     };
     function CoachPerf(opts) {
@@ -28,6 +29,7 @@
       this.mat_color = '#333';
       this.hn = 10;
       this.dot_radius = 20;
+      this.r_speed = 0.1;
       return this.set_url_config();
     };
     CoachPerf.prototype.set_url_config = function(reload) {
@@ -40,6 +42,8 @@
         kv = arg.split(':');
         key = kv[0];
         val = parseFloat(kv[1]);
+        console.log("key", key);
+        console.log("val", val);
         if (_.include(valid_keys, key)) {
           console.log("Setting '" + key + "' to " + val);
           this[key] = val;
@@ -118,7 +122,7 @@
       return dot_field_r;
     };
     CoachPerf.prototype.draw = function(event) {
-      return this.df2.rotate(0.1, this.v.center);
+      return this.df2.rotate(this.r_speed, this.v.center);
     };
     return CoachPerf;
   })();

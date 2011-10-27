@@ -4,6 +4,7 @@ class CoachPerf
     opts =
       hn: 'number of holes in a row'
       dot_radius: 'the radius of each dot'
+      r_speed: 'rotation_speed'
   
   constructor: (opts) ->
     @init_canvas()
@@ -27,6 +28,7 @@ class CoachPerf
     @mat_color = '#333'
     @hn = 10
     @dot_radius = 20
+    @r_speed = 0.1
     @set_url_config()
     
   set_url_config: (reload) ->
@@ -38,6 +40,8 @@ class CoachPerf
       kv = arg.split ':'
       key = kv[0]
       val = parseFloat kv[1]
+      console.log "key", key
+      console.log "val", val
       if _.include valid_keys, key
         console.log "Setting '#{key}' to #{val}"
         this[key] = val
@@ -118,7 +122,7 @@ class CoachPerf
   
   draw: (event) =>
     # center = @mouse_point or @v.center
-    @df2.rotate 0.1, @v.center
+    @df2.rotate @r_speed, @v.center
   
 $(document).ready ->
   @coach_perf = new CoachPerf()
