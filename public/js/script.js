@@ -3,13 +3,20 @@
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   CoachPerf = (function() {
     function CoachPerf(opts) {
-      this.init_canvas();
+      this.draw = __bind(this.draw, this);
+      this.mouse_move = __bind(this.mouse_move, this);      this.init_canvas();
       this.p = paper;
       this.p.setup(this.canvas[0]);
       this.v = paper.view;
       this.setup();
       this.v.onFrame = this.draw;
+      this.tool = new this.p.Tool;
+      this.tool.onMouseMove = this.mouse_move;
     }
+    CoachPerf.prototype.mouse_move = function(event) {
+      console.log("event", event);
+      return this.mouse_point = event.point;
+    };
     CoachPerf.prototype.init_canvas = function(canvas_id) {
       this.canvas = this.create_canvas(canvas_id || 'paper_canvas');
       this.resize_canvas();
@@ -28,31 +35,33 @@
       return this.canvas.height($(window).height());
     };
     CoachPerf.prototype.setup = function() {
-      this.draw_dot_field();
+      this.df1 = this.draw_dot_field();
+      this.df2 = this.draw_dot_field();
       return this.v.draw();
     };
     CoachPerf.prototype.draw_dot_row = function(n, y, r, even) {
-      var circ, i, x, _results;
-      _results = [];
+      var dot, i, row_dots, x;
+      row_dots = [];
       for (i = 1; 1 <= n ? i <= n : i >= n; 1 <= n ? i++ : i--) {
         x = r * i;
         if (even) {
           x -= 0.50 * r;
         }
-        circ = new this.p.Path.Circle([x, y], 5);
-        _results.push(circ.fillColor = 'white');
+        dot = new this.p.Path.Circle([x, y], 5);
+        dot.fillColor = 'white';
+        row_dots.push(dot);
       }
-      return _results;
+      return row_dots;
     };
     CoachPerf.prototype.draw_dot_field = function(offset) {
-      var even, h, hn, i, r, vd, vn, w, y, _results;
+      var dot, dot_field, even, field_dots, h, hn, i, r, row_dots, vd, vn, w, y, _i, _len;
       w = this.v.size.width;
       h = this.v.size.height;
       hn = 20;
       r = w / 20;
       vd = r / 4;
       vn = Math.floor(h / vd);
-      _results = [];
+      field_dots = [];
       for (i = 1; 1 <= vn ? i <= vn : i >= vn; 1 <= vn ? i++ : i--) {
         y = i * vd;
         if (i % 2 === 0) {
@@ -60,11 +69,20 @@
         } else {
           even = false;
         }
-        _results.push(this.draw_dot_row(hn, y, r, even));
+        row_dots = this.draw_dot_row(hn, y, r, even);
+        for (_i = 0, _len = row_dots.length; _i < _len; _i++) {
+          dot = row_dots[_i];
+          field_dots.push(dot);
+        }
       }
-      return _results;
+      dot_field = new this.p.Group(field_dots);
+      return dot_field;
     };
-    CoachPerf.prototype.draw = function(event) {};
+    CoachPerf.prototype.draw = function(event) {
+      var center;
+      center = this.mouse_point || this.v.center;
+      return this.df2.rotate(0.1, center);
+    };
     return CoachPerf;
   })();
   $(document).ready(function() {
