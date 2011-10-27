@@ -16,9 +16,9 @@ class CoachPerf
     @tool.onMouseMove = @mouse_move
     
   set_config: ->
-    @dot_radius = 5
+    @dot_radius = 20
     @mat_color = '#333'
-    @hn = 50
+    @hn = 10
     
   mouse_move: (event) =>
     console.log "event", event

@@ -15,9 +15,9 @@
       this.tool.onMouseMove = this.mouse_move;
     }
     CoachPerf.prototype.set_config = function() {
-      this.dot_radius = 5;
+      this.dot_radius = 20;
       this.mat_color = '#333';
-      return this.hn = 50;
+      return this.hn = 10;
     };
     CoachPerf.prototype.mouse_move = function(event) {
       console.log("event", event);
