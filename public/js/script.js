@@ -28,13 +28,41 @@
       return this.canvas.height($(window).height());
     };
     CoachPerf.prototype.setup = function() {
-      var center, hex, radius;
-      center = this.v.center;
-      radius = this.v.size.width / 6;
-      hex = new this.p.Path.RegularPolygon(center, 6, radius);
-      hex.fillColor = new this.p.GrayColor(0.8);
-      console.log("hex", hex);
+      this.draw_dot_field();
       return this.v.draw();
+    };
+    CoachPerf.prototype.draw_dot_row = function(n, y, r, even) {
+      var circ, i, x, _results;
+      _results = [];
+      for (i = 1; 1 <= n ? i <= n : i >= n; 1 <= n ? i++ : i--) {
+        x = r * i;
+        if (even) {
+          x -= 0.50 * r;
+        }
+        circ = new this.p.Path.Circle([x, y], 5);
+        _results.push(circ.fillColor = 'white');
+      }
+      return _results;
+    };
+    CoachPerf.prototype.draw_dot_field = function(offset) {
+      var even, h, hn, i, r, vd, vn, w, y, _results;
+      w = this.v.size.width;
+      h = this.v.size.height;
+      hn = 20;
+      r = w / 20;
+      vd = r / 4;
+      vn = Math.floor(h / vd);
+      _results = [];
+      for (i = 1; 1 <= vn ? i <= vn : i >= vn; 1 <= vn ? i++ : i--) {
+        y = i * vd;
+        if (i % 2 === 0) {
+          even = true;
+        } else {
+          even = false;
+        }
+        _results.push(this.draw_dot_row(hn, y, r, even));
+      }
+      return _results;
     };
     CoachPerf.prototype.draw = function(event) {};
     return CoachPerf;
