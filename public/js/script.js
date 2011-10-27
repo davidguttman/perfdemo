@@ -15,8 +15,9 @@
       this.tool.onMouseMove = this.mouse_move;
     }
     CoachPerf.prototype.set_config = function() {
-      this.dot_radius = 10;
-      return this.mat_color = '#333';
+      this.dot_radius = 5;
+      this.mat_color = '#333';
+      return this.hn = 50;
     };
     CoachPerf.prototype.mouse_move = function(event) {
       console.log("event", event);
@@ -45,10 +46,9 @@
       return this.v.draw();
     };
     CoachPerf.prototype.draw_dot_row = function(n, y, r, even) {
-      var dot, i, i2, row_dots, x;
+      var dot, i, row_dots, x;
       row_dots = [];
       for (i = 1; 1 <= n ? i <= n : i >= n; 1 <= n ? i++ : i--) {
-        i2 = i - n / 2;
         x = r * i;
         if (even) {
           x -= 0.50 * r;
@@ -60,12 +60,12 @@
     };
     CoachPerf.prototype.draw_dot_field = function(offset) {
       var bg, dot, dot_field, dot_field_r, even, field_dots, h, hn, i, r, row_dots, vd, vn, w, y, _i, _len;
-      w = this.v.size.width * 1.20;
+      w = this.v.size.width;
       h = this.v.size.height;
-      bg = new this.p.Path.Rectangle([0 - (0.1 * w), 0], [w, w]);
+      bg = new this.p.Path.Circle(this.v.center, this.v.size.height);
       bg.fillColor = this.mat_color;
-      hn = 20;
-      r = w / 20;
+      hn = this.hn;
+      r = w / hn;
       vd = r / 4;
       vn = Math.floor(w / vd);
       field_dots = [bg];
@@ -88,9 +88,7 @@
       return dot_field_r;
     };
     CoachPerf.prototype.draw = function(event) {
-      var center;
-      center = this.mouse_point || this.v.center;
-      return this.df2.rotate(0.1, center);
+      return this.df2.rotate(0.1, this.v.center);
     };
     return CoachPerf;
   })();

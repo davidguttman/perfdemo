@@ -16,8 +16,9 @@ class CoachPerf
     @tool.onMouseMove = @mouse_move
     
   set_config: ->
-    @dot_radius = 10
+    @dot_radius = 5
     @mat_color = '#333'
+    @hn = 50
     
   mouse_move: (event) =>
     console.log "event", event
@@ -48,7 +49,6 @@ class CoachPerf
     row_dots = []
     
     for i in [1..n]
-      i2 = i - n/2
       x = r*i 
       
       if even
@@ -62,14 +62,14 @@ class CoachPerf
     return row_dots
     
   draw_dot_field: (offset) ->
-    w = @v.size.width*1.20
+    w = @v.size.width
     h = @v.size.height
     
-    bg = new @p.Path.Rectangle [0-(0.1*w),0], [w, w]
+    bg = new @p.Path.Circle @v.center, @v.size.height
     bg.fillColor = @mat_color
 
-    hn = 20
-    r = w/20
+    hn = @hn
+    r = w/hn
     
     vd = r/4
     
@@ -95,8 +95,8 @@ class CoachPerf
     return dot_field_r
   
   draw: (event) =>
-    center = @mouse_point or @v.center
-    @df2.rotate 0.1, center
+    # center = @mouse_point or @v.center
+    @df2.rotate 0.1, @v.center
   
 $(document).ready ->
   @coach_perf = new CoachPerf()
