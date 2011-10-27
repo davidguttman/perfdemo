@@ -1,7 +1,15 @@
 class CoachPerf
   
+  url_opts: ->
+    opts =
+      hn: 'number of holes in a row'
+      dot_radius: 'the radius of each dot'
+  
   constructor: (opts) ->
     @init_canvas()
+    $(window).bind 'hashchange', =>
+      @set_url_config true
+      
     @set_config()
     
     @p = paper
@@ -16,16 +24,31 @@ class CoachPerf
     @tool.onMouseMove = @mouse_move
     
   set_config: ->
-    @dot_radius = 20
     @mat_color = '#333'
     @hn = 10
+    @dot_radius = 20
+    @set_url_config()
+    
+  set_url_config: (reload) ->
+    valid_keys = _.keys @url_opts()
+    
+    hash = _.ltrim window.location.hash, ['#','/']
+    args = hash.split ','
+    for arg in args
+      kv = arg.split ':'
+      key = kv[0]
+      val = parseFloat kv[1]
+      if _.include valid_keys, key
+        console.log "Setting '#{key}' to #{val}"
+        this[key] = val
+    
+    @constructor() if reload
     
   mouse_move: (event) =>
-    console.log "event", event
     @mouse_point = event.point
     
-    
   init_canvas: (canvas_id) ->
+    $('body').empty()
     @canvas = @create_canvas (canvas_id or 'paper_canvas')
     @resize_canvas()
     $(window).resize =>
@@ -40,7 +63,7 @@ class CoachPerf
     @canvas.width $(window).width()
     @canvas.height $(window).height()
 
-  setup: ->    
+  setup: ->
     @df1 = @draw_dot_field()
     @df2 = @draw_dot_field()
     @v.draw()
@@ -55,7 +78,6 @@ class CoachPerf
         x -= 0.50*r
       
       dot = new @p.Path.Circle [x, y], @dot_radius
-      # dot.fillColor = 'white'
       
       row_dots.push dot
     

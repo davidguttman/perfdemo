@@ -2,9 +2,19 @@
   var CoachPerf;
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   CoachPerf = (function() {
+    CoachPerf.prototype.url_opts = function() {
+      var opts;
+      return opts = {
+        hn: 'number of holes in a row',
+        dot_radius: 'the radius of each dot'
+      };
+    };
     function CoachPerf(opts) {
       this.draw = __bind(this.draw, this);
       this.mouse_move = __bind(this.mouse_move, this);      this.init_canvas();
+      $(window).bind('hashchange', __bind(function() {
+        return this.set_url_config(true);
+      }, this));
       this.set_config();
       this.p = paper;
       this.p.setup(this.canvas[0]);
@@ -15,15 +25,35 @@
       this.tool.onMouseMove = this.mouse_move;
     }
     CoachPerf.prototype.set_config = function() {
-      this.dot_radius = 20;
       this.mat_color = '#333';
-      return this.hn = 10;
+      this.hn = 10;
+      this.dot_radius = 20;
+      return this.set_url_config();
+    };
+    CoachPerf.prototype.set_url_config = function(reload) {
+      var arg, args, hash, key, kv, val, valid_keys, _i, _len;
+      valid_keys = _.keys(this.url_opts());
+      hash = _.ltrim(window.location.hash, ['#', '/']);
+      args = hash.split(',');
+      for (_i = 0, _len = args.length; _i < _len; _i++) {
+        arg = args[_i];
+        kv = arg.split(':');
+        key = kv[0];
+        val = parseFloat(kv[1]);
+        if (_.include(valid_keys, key)) {
+          console.log("Setting '" + key + "' to " + val);
+          this[key] = val;
+        }
+      }
+      if (reload) {
+        return this.constructor();
+      }
     };
     CoachPerf.prototype.mouse_move = function(event) {
-      console.log("event", event);
       return this.mouse_point = event.point;
     };
     CoachPerf.prototype.init_canvas = function(canvas_id) {
+      $('body').empty();
       this.canvas = this.create_canvas(canvas_id || 'paper_canvas');
       this.resize_canvas();
       return $(window).resize(__bind(function() {
