@@ -43,6 +43,7 @@ class CoachPerf
     row_dots = []
     
     for i in [1..n]
+      i2 = i - n/2
       x = r*i 
       
       if even
@@ -55,7 +56,7 @@ class CoachPerf
     return row_dots
     
   draw_dot_field: (offset) ->
-    w = @v.size.width
+    w = @v.size.width*1.20
     h = @v.size.height
 
     hn = 20
@@ -63,7 +64,7 @@ class CoachPerf
     
     vd = r/4
     
-    vn = Math.floor h/vd
+    vn = Math.floor w/vd
     
     field_dots = []
     
@@ -80,6 +81,7 @@ class CoachPerf
         field_dots.push dot
 
     dot_field = new @p.Group field_dots
+    dot_field.position = @v.center
     return dot_field
   
   draw: (event) =>

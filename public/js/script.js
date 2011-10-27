@@ -40,9 +40,10 @@
       return this.v.draw();
     };
     CoachPerf.prototype.draw_dot_row = function(n, y, r, even) {
-      var dot, i, row_dots, x;
+      var dot, i, i2, row_dots, x;
       row_dots = [];
       for (i = 1; 1 <= n ? i <= n : i >= n; 1 <= n ? i++ : i--) {
+        i2 = i - n / 2;
         x = r * i;
         if (even) {
           x -= 0.50 * r;
@@ -55,12 +56,12 @@
     };
     CoachPerf.prototype.draw_dot_field = function(offset) {
       var dot, dot_field, even, field_dots, h, hn, i, r, row_dots, vd, vn, w, y, _i, _len;
-      w = this.v.size.width;
+      w = this.v.size.width * 1.20;
       h = this.v.size.height;
       hn = 20;
       r = w / 20;
       vd = r / 4;
-      vn = Math.floor(h / vd);
+      vn = Math.floor(w / vd);
       field_dots = [];
       for (i = 1; 1 <= vn ? i <= vn : i >= vn; 1 <= vn ? i++ : i--) {
         y = i * vd;
@@ -76,6 +77,7 @@
         }
       }
       dot_field = new this.p.Group(field_dots);
+      dot_field.position = this.v.center;
       return dot_field;
     };
     CoachPerf.prototype.draw = function(event) {
