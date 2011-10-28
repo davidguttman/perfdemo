@@ -120,6 +120,7 @@ class CoachPerf
     @total_dots = vn*hn
     @dots_rendered = 0
     
+    console.log "Rendering #{@total_dots} dots..." 
     for i in [1...vn]
       y = i*vd + y_start
       
@@ -132,8 +133,9 @@ class CoachPerf
       for dot in row_dots
         field_dots.push dot
 
-      console.log "Rendering: #{@dots_rendered}/#{@total_dots} (#{100*@dots_rendered/@total_dots}%)"
+      # console.log "Rendering: #{@dots_rendered}/#{@total_dots} (#{100*@dots_rendered/@total_dots}%)"
 
+    console.log "Rendering dots COMPLETE"
     console.log "Creating compound path..."
     dot_field = new @p.CompoundPath field_dots
     console.log "Creating compound path COMPLETE"

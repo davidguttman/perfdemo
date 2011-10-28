@@ -115,6 +115,7 @@
       field_dots = [bg];
       this.total_dots = vn * hn;
       this.dots_rendered = 0;
+      console.log("Rendering " + this.total_dots + " dots...");
       for (i = 1; 1 <= vn ? i < vn : i > vn; 1 <= vn ? i++ : i--) {
         y = i * vd + y_start;
         if (i % 2 === 0) {
@@ -127,8 +128,8 @@
           dot = row_dots[_i];
           field_dots.push(dot);
         }
-        console.log("Rendering: " + this.dots_rendered + "/" + this.total_dots + " (" + (100 * this.dots_rendered / this.total_dots) + "%)");
       }
+      console.log("Rendering dots COMPLETE");
       console.log("Creating compound path...");
       dot_field = new this.p.CompoundPath(field_dots);
       console.log("Creating compound path COMPLETE");
