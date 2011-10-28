@@ -74,12 +74,17 @@ class CoachPerf
     row_dots = []
     
     for i in [1..n]
-      x = r*i + x_start - (@dot_radius*2)
+      if @dot_radius > 1
+        dr = @dot_radius
+      else
+        dr = @dot_radius * r/4
+      
+      x = r*i + x_start - (4*dr)
       
       if even
         x -= 0.50*r
       
-      dot = new @p.Path.Circle [x, y], @dot_radius
+      dot = new @p.Path.Circle [x, y], dr
       
       row_dots.push dot
       @dots_rendered += 1

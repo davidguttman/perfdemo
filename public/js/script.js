@@ -78,14 +78,19 @@
       return this.df2 = this.df1.clone();
     };
     CoachPerf.prototype.draw_dot_row = function(x_start, n, y, r, even) {
-      var dot, i, row_dots, x;
+      var dot, dr, i, row_dots, x;
       row_dots = [];
       for (i = 1; 1 <= n ? i <= n : i >= n; 1 <= n ? i++ : i--) {
-        x = r * i + x_start - (this.dot_radius * 2);
+        if (this.dot_radius > 1) {
+          dr = this.dot_radius;
+        } else {
+          dr = this.dot_radius * r / 4;
+        }
+        x = r * i + x_start - (4 * dr);
         if (even) {
           x -= 0.50 * r;
         }
-        dot = new this.p.Path.Circle([x, y], this.dot_radius);
+        dot = new this.p.Path.Circle([x, y], dr);
         row_dots.push(dot);
         this.dots_rendered += 1;
       }
