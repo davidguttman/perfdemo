@@ -79,7 +79,7 @@ class CoachPerf
       else
         dr = @dot_radius * r/4
       
-      x = r*i + x_start - (4*dr)
+      x = r*i + x_start - dr
       
       if even
         x -= 0.50*r
@@ -100,11 +100,11 @@ class CoachPerf
       max_dimension = h
 
     
-    # bg = new @p.Path.Circle @v.center, max_dimension
     x_start = (w-max_dimension)/2
     y_start = (h-max_dimension)/2
     
-    bg = new @p.Path.Rectangle [x_start, y_start], [max_dimension,max_dimension]
+    bg = new @p.Path.Circle @v.center, max_dimension
+    # bg = new @p.Path.Rectangle [x_start, y_start], [max_dimension,max_dimension]
     # console.log "color", color
     # bg.fillColor = color
 

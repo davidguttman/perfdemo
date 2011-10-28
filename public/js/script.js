@@ -86,7 +86,7 @@
         } else {
           dr = this.dot_radius * r / 4;
         }
-        x = r * i + x_start - (4 * dr);
+        x = r * i + x_start - dr;
         if (even) {
           x -= 0.50 * r;
         }
@@ -107,7 +107,7 @@
       }
       x_start = (w - max_dimension) / 2;
       y_start = (h - max_dimension) / 2;
-      bg = new this.p.Path.Rectangle([x_start, y_start], [max_dimension, max_dimension]);
+      bg = new this.p.Path.Circle(this.v.center, max_dimension);
       hn = this.hn;
       r = max_dimension / hn;
       vd = r / 4;
