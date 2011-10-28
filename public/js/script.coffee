@@ -70,11 +70,11 @@ class CoachPerf
     @df1 = @draw_dot_field '#111'
     @df2 = @df1.clone()
     
-  draw_dot_row: (n, y, r, even) ->
+  draw_dot_row: (x_start, n, y, r, even) ->
     row_dots = []
     
     for i in [1..n]
-      x = r*i 
+      x = r*i + x_start - (@dot_radius*2)
       
       if even
         x -= 0.50*r
@@ -89,32 +89,41 @@ class CoachPerf
   draw_dot_field: (color) ->
     w = @v.size.width
     h = @v.size.height
+    if w > h
+      max_dimension = w
+    else
+      max_dimension = h
+
     
-    bg = new @p.Path.Circle @v.center, @v.size.height
+    # bg = new @p.Path.Circle @v.center, max_dimension
+    x_start = (w-max_dimension)/2
+    y_start = (h-max_dimension)/2
+    
+    bg = new @p.Path.Rectangle [x_start, y_start], [max_dimension,max_dimension]
     # console.log "color", color
     # bg.fillColor = color
 
     hn = @hn
-    r = w/hn
+    r = max_dimension/hn
     
     vd = r/4
     
-    vn = Math.floor w/vd
+    vn = Math.floor max_dimension/vd
     
     field_dots = [bg]
     
     @total_dots = vn*hn
     @dots_rendered = 0
     
-    for i in [1..vn]
-      y = i*vd
+    for i in [1...vn]
+      y = i*vd + y_start
       
       if i % 2 is 0
         even = true
       else
         even = false
 
-      row_dots = @draw_dot_row hn, y, r, even
+      row_dots = @draw_dot_row x_start, hn, y, r, even
       for dot in row_dots
         field_dots.push dot
 
