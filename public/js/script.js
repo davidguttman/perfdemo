@@ -26,7 +26,6 @@
       this.tool.onMouseMove = this.mouse_move;
     }
     CoachPerf.prototype.set_config = function() {
-      this.mat_color = '#333';
       this.hn = 10;
       this.dot_radius = 20;
       this.r_speed = 0.1;
@@ -75,9 +74,8 @@
       return this.canvas.height($(window).height());
     };
     CoachPerf.prototype.setup = function() {
-      this.df1 = this.draw_dot_field();
-      this.df2 = this.draw_dot_field();
-      return this.v.draw();
+      this.df1 = this.draw_dot_field('#111');
+      return this.df2 = this.draw_dot_field('#222');
     };
     CoachPerf.prototype.draw_dot_row = function(n, y, r, even) {
       var dot, i, row_dots, x;
@@ -92,12 +90,11 @@
       }
       return row_dots;
     };
-    CoachPerf.prototype.draw_dot_field = function(offset) {
+    CoachPerf.prototype.draw_dot_field = function(color) {
       var bg, dot, dot_field, dot_field_r, even, field_dots, h, hn, i, r, row_dots, vd, vn, w, y, _i, _len;
       w = this.v.size.width;
       h = this.v.size.height;
       bg = new this.p.Path.Circle(this.v.center, this.v.size.height);
-      bg.fillColor = this.mat_color;
       hn = this.hn;
       r = w / hn;
       vd = r / 4;
@@ -117,12 +114,13 @@
         }
       }
       dot_field = new this.p.CompoundPath(field_dots);
+      dot_field.fillColor = color;
       dot_field_r = dot_field.rasterize();
-      dot_field.remove;
+      dot_field.remove();
       return dot_field_r;
     };
     CoachPerf.prototype.draw = function(event) {
-      return this.df2.rotate(this.r_speed, this.v.center);
+      return this.df2.rotate(this.r_speed, this.df2.center);
     };
     return CoachPerf;
   })();

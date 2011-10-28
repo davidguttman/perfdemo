@@ -25,7 +25,6 @@ class CoachPerf
     @tool.onMouseMove = @mouse_move
     
   set_config: ->
-    @mat_color = '#333'
     @hn = 10
     @dot_radius = 20
     @r_speed = 0.1
@@ -68,9 +67,8 @@ class CoachPerf
     @canvas.height $(window).height()
 
   setup: ->
-    @df1 = @draw_dot_field()
-    @df2 = @draw_dot_field()
-    @v.draw()
+    @df1 = @draw_dot_field '#111'
+    @df2 = @draw_dot_field '#222'
     
   draw_dot_row: (n, y, r, even) ->
     row_dots = []
@@ -87,12 +85,13 @@ class CoachPerf
     
     return row_dots
     
-  draw_dot_field: (offset) ->
+  draw_dot_field: (color) ->
     w = @v.size.width
     h = @v.size.height
     
     bg = new @p.Path.Circle @v.center, @v.size.height
-    bg.fillColor = @mat_color
+    # console.log "color", color
+    # bg.fillColor = color
 
     hn = @hn
     r = w/hn
@@ -116,13 +115,15 @@ class CoachPerf
         field_dots.push dot
 
     dot_field = new @p.CompoundPath field_dots
+    dot_field.fillColor = color
+    
     dot_field_r = dot_field.rasterize()
-    dot_field.remove
+    dot_field.remove()
     return dot_field_r
   
   draw: (event) =>
     # center = @mouse_point or @v.center
-    @df2.rotate @r_speed, @v.center
+    @df2.rotate @r_speed, @df2.center
   
 $(document).ready ->
   @coach_perf = new CoachPerf()
