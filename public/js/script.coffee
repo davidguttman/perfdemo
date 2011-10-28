@@ -68,7 +68,7 @@ class CoachPerf
 
   setup: ->
     @df1 = @draw_dot_field '#111'
-    @df2 = @draw_dot_field '#222'
+    @df2 = @df1.clone()
     
   draw_dot_row: (n, y, r, even) ->
     row_dots = []
@@ -82,6 +82,7 @@ class CoachPerf
       dot = new @p.Path.Circle [x, y], @dot_radius
       
       row_dots.push dot
+      @dots_rendered += 1
     
     return row_dots
     
@@ -102,6 +103,9 @@ class CoachPerf
     
     field_dots = [bg]
     
+    @total_dots = vn*hn
+    @dots_rendered = 0
+    
     for i in [1..vn]
       y = i*vd
       
@@ -114,10 +118,16 @@ class CoachPerf
       for dot in row_dots
         field_dots.push dot
 
+      console.log "Rendering: #{@dots_rendered}/#{@total_dots} (#{100*@dots_rendered/@total_dots}%)"
+
+    console.log "Creating compound path..."
     dot_field = new @p.CompoundPath field_dots
+    console.log "Creating compound path COMPLETE"
     dot_field.fillColor = color
     
+    console.log "Rasterizing..." 
     dot_field_r = dot_field.rasterize()
+    console.log "Rasterizing COMPLETE" 
     dot_field.remove()
     return dot_field_r
   

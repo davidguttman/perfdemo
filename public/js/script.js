@@ -75,7 +75,7 @@
     };
     CoachPerf.prototype.setup = function() {
       this.df1 = this.draw_dot_field('#111');
-      return this.df2 = this.draw_dot_field('#222');
+      return this.df2 = this.df1.clone();
     };
     CoachPerf.prototype.draw_dot_row = function(n, y, r, even) {
       var dot, i, row_dots, x;
@@ -87,6 +87,7 @@
         }
         dot = new this.p.Path.Circle([x, y], this.dot_radius);
         row_dots.push(dot);
+        this.dots_rendered += 1;
       }
       return row_dots;
     };
@@ -100,6 +101,8 @@
       vd = r / 4;
       vn = Math.floor(w / vd);
       field_dots = [bg];
+      this.total_dots = vn * hn;
+      this.dots_rendered = 0;
       for (i = 1; 1 <= vn ? i <= vn : i >= vn; 1 <= vn ? i++ : i--) {
         y = i * vd;
         if (i % 2 === 0) {
@@ -112,10 +115,15 @@
           dot = row_dots[_i];
           field_dots.push(dot);
         }
+        console.log("Rendering: " + this.dots_rendered + "/" + this.total_dots + " (" + (100 * this.dots_rendered / this.total_dots) + "%)");
       }
+      console.log("Creating compound path...");
       dot_field = new this.p.CompoundPath(field_dots);
+      console.log("Creating compound path COMPLETE");
       dot_field.fillColor = color;
+      console.log("Rasterizing...");
       dot_field_r = dot_field.rasterize();
+      console.log("Rasterizing COMPLETE");
       dot_field.remove();
       return dot_field_r;
     };
